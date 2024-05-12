@@ -42,12 +42,12 @@ jobs:
                       }
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+            - uses: montudor/action-zip@v1
+              with:
+                  args: zip curve_terrain.zip LICENSE addons/curve_terrain/
             - name: Release
               uses: softprops/action-gh-release@v2
               with:
                   files: |
-                      README.md
-                      LICENSE
-                      addons/curve_terrain/
+                      curve_terrain.zip
                   body: ${{steps.github_release.outputs.changelog}}
