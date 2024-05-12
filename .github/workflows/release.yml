@@ -1,0 +1,53 @@
+name: Main
+
+on:
+    push:
+        tags:
+            - "*.*.*"
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Build Changelog
+              id: github_release
+              uses: mikepenz/release-changelog-builder-action@v4
+              with:
+                  commitMode: true
+                  configurationJson: |
+                      {
+                        "template": "#{{CHANGELOG}}",
+                        "categories": [
+                          {
+                              "title": "## Feature",
+                              "labels": ["feat", "feature"]
+                          },
+                          {
+                              "title": "## Fix",
+                              "labels": ["fix", "bug"]
+                          },
+                          {
+                              "title": "## Other",
+                              "labels": []
+                          }
+                        ],
+                        "label_extractor": [
+                          {
+                            "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+                            "target": "$1"
+                          }
+                        ],
+                      }
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: |
+                      README.md
+                      LICENSE
+                      addons/curve_terrain/
+                  body: ${{steps.github_release.outputs.changelog}}
