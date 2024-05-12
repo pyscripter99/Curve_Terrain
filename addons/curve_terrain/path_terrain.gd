@@ -43,7 +43,7 @@ func _ready():
 			self.add_child(terrain_holder)
 			terrain_holder.set_owner(get_tree().edited_scene_root) # uncomment to show children to user need to make this a function
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		# If the Curve object has been updated
 		varlist = [bake_interval, edge_noise_strength, edge_noise_freq]

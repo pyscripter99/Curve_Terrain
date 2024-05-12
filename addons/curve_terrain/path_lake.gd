@@ -37,7 +37,7 @@ func _ready():
 		self.name = "Curve Lake"
 
 var counter = 0.0
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		# If the Curve object has been updated
 		varlist = [bake_interval, edge_noise_strength, edge_noise_freq]
