@@ -30,13 +30,14 @@ var change = 0
 
 var queue = []
 
+var counter = 0.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if Engine.is_editor_hint(): # only run if in the editor. We don't want to have any updates occuring in game for any reason
 		self.curve_changed.connect(_on_Path_curve_changed_lake)
 		self.name = "Curve Lake"
 
-var counter = 0.0
 func _process(_delta):
 	if Engine.is_editor_hint():
 		# If the Curve object has been updated
