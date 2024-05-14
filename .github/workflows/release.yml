@@ -11,37 +11,13 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Build Changelog
-              id: github_release
-              uses: mikepenz/release-changelog-builder-action@v4
+            - name: Generate Changelog
+              id: changelog
+              uses: requarks/changelog-action@v1
               with:
-                  commitMode: true
-                  configurationJson: |
-                      {
-                        "template": "#{{CHANGELOG}}",
-                        "categories": [
-                          {
-                              "title": "## Feature",
-                              "labels": ["feat", "feature"]
-                          },
-                          {
-                              "title": "## Fix",
-                              "labels": ["fix", "bug"]
-                          },
-                          {
-                              "title": "## Other",
-                              "labels": []
-                          }
-                        ],
-                        "label_extractor": [
-                          {
-                            "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
-                            "target": "$1"
-                          }
-                        ],
-                      }
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  token: ${{ github.token }}
+                  tag: ${{ github.ref_name }}
+                  writeToFile: false
             - uses: montudor/action-zip@v1
               with:
                   args: zip -r curve_terrain.zip LICENSE addons/curve_terrain/
@@ -50,4 +26,4 @@ jobs:
               with:
                   files: |
                       curve_terrain.zip
-                  body: ${{steps.github_release.outputs.changelog}}
+                  body: ${{steps.changelog.outputs.changes}}
